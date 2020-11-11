@@ -1,6 +1,5 @@
 //подключаем библиотеку для работы с http
 const http = require('http');
-const port = 3000;
 //подключаем библиотеку для чтения файлов
 const fs = require('fs');
 
@@ -15,6 +14,8 @@ const server = http.createServer((request, response) => {
     }
 
 });
+
+const port = process.env.PORT || 3000;
 
 server.listen(port, (err) => {
     if (err) {
