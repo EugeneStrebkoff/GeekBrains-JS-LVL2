@@ -1,21 +1,25 @@
 //подключаем библиотеку для работы с http
 const http = require('http');
+const port = 3000;
 //подключаем библиотеку для чтения файлов
 const fs = require('fs');
 
-const files = [
-    './public/index.html',
-    './public/style.css',
-    './public/main.js'
-]
-const server = http.createServer((req, res) =>{
-    console.log(req.url);
+const server = http.createServer((request, response) => {
+    console.log(request.url);
 
-    const body = fs.readFileSync('./public/index.html');
-    
-    res.end(body);
+    try {
+        response.end(fs.readFileSync('./public' + request.url));
+    } catch (err) {
+        console.log(err.name + ': ' + err.message);
+        response.end(fs.readFileSync('./public/index.html'));
+    }
+
 });
 
-server.listen(3000);
+server.listen(port, (err) => {
+    if (err) {
+        return console.log('something bad happened', err);
+    }
 
-console.log('Server started');
+    console.log(`server is listening on ${port}`);
+});
