@@ -6,12 +6,15 @@ const fs = require('fs');
 const server = http.createServer((request, response) => {
     console.log(request.url);
 
+    let body = '';
     try {
-        response.end(fs.readFileSync('./public' + request.url));
+        body = fs.readFileSync('./public' + request.url);
     } catch (err) {
         console.log(err.name + ': ' + err.message);
-        response.end(fs.readFileSync('./public/index.html'));
+        body = fs.readFileSync('./public/index.html');
     }
+
+    response.end(body);
 
 });
 
