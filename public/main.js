@@ -176,7 +176,7 @@ class Catalog extends List {
 
     constructor() {
         super();
-        this.items = this.fetchGoods(10);
+        this.items = this.fetchGoods(13);
         this.items = this.items.map((cur) => {
             return new Product(cur);
         })
