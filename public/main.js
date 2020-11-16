@@ -2,7 +2,11 @@ class Product {
     name = null;
     price = 0;
     count = 1;
-    constructor(name, price) {
+
+    constructor({
+        name,
+        price
+    }) {
         this.name = name;
         this.price = price;
     }
@@ -21,7 +25,6 @@ class Product {
     }
 
     btn() {
-        let block = document.querySelector('.product-block');
         let btn = document.createElement('button');
         btn.classList.add('btn-buy');
         btn.innerText = 'Купить';
@@ -45,11 +48,23 @@ class Product {
 }
 
 class List {
-    items = []
+    items = [];
+
     constructor() {
 
-
     }
+    //в данной реализации метод принимает массив товаров и, перебирая создаёт новый массив объектов, имеющих ключи name и price с соответствующими значениями.
+    fetchGoods(quantity) {
+        let fetchedGoods = [];
+        for (let i = 1; i <= quantity; i++) {
+            fetchedGoods.push({
+                name: `${i}`,
+                price: i * 10
+            });
+        }
+        return fetchedGoods;
+    }
+
     add(product) {
         this.items.push(product);
     }
@@ -64,6 +79,7 @@ class List {
 class Cart extends List {
     sumOfPrice = 0;
     sumOfGoods = 0;
+
     constructor() {
         if (Cart._instance) {
             return Cart._instance;
@@ -86,7 +102,7 @@ class Cart extends List {
         this.btn();
     }
 
-    render(){
+    render() {
         let cartDiv = document.querySelector('.cart-block');
         this.items.forEach(elem => {
             let itemBlock = document.createElement('div');
@@ -94,35 +110,35 @@ class Cart extends List {
             let btnInc = document.createElement('button');
             btnInc.classList.add('btn-inc');
             btnInc.innerText = '+';
-            btnInc.addEventListener('click', () =>{
+            btnInc.addEventListener('click', () => {
                 elem.inc();
                 this.sumOfPrice += elem.price;
                 this.sumOfGoods++;
                 cartDiv.innerHTML = '';
                 this.render();
-        
-        })
+
+            })
             let btnDec = document.createElement('button');
             btnInc.classList.add('btn-dec');
             btnDec.innerText = '-';
-            btnDec.addEventListener('click', () =>{
+            btnDec.addEventListener('click', () => {
                 elem.dec();
                 this.sumOfPrice -= elem.price;
                 this.sumOfGoods--;
                 cartDiv.innerHTML = '';
-                if(elem.count === 0){
+                if (elem.count === 0) {
                     this.items.splice(this.items.indexOf(elem), 1);
                     elem.count = 1;
                 }
                 this.render();
-        })
+            })
             cartDiv.appendChild(itemBlock);
             cartDiv.appendChild(btnInc);
             cartDiv.appendChild(btnDec);
         })
 
         let sumBlock = document.createElement('div');
-        if(this.sumOfPrice === 0){
+        if (this.sumOfPrice === 0) {
             sumBlock.innerText = 'Корзина пока что пуста';
         } else {
             sumBlock.innerText = `Всего в корзине ${this.sumOfGoods} товара(ов) на сумму ${this.sumOfPrice}`;
@@ -130,8 +146,8 @@ class Cart extends List {
         cartDiv.appendChild(sumBlock);
     }
 
-    productInstance(product){
-        if(this.items.indexOf(product) != -1){
+    productInstance(product) {
+        if (this.items.indexOf(product) != -1) {
             product.inc();
         } else {
             this.items.push(product);
@@ -140,7 +156,7 @@ class Cart extends List {
         this.sumOfGoods++;
     }
 
-    add(product){
+    add(product) {
         this.productInstance(product);
     }
 
@@ -152,28 +168,61 @@ class Cart extends List {
         })
     }
 
-    btnInc(){
-    }
+    btnInc() {}
 }
 
 class Catalog extends List {
+    loadedGoods = 2;
+
     constructor() {
         super();
+        this.items = this.fetchGoods(13);
+        this.items = this.items.map((cur) => {
+            return new Product(cur);
+        })
+        this.render();
     }
 
     render() {
         if (this.items) {
-            this.items.forEach(element => element.createProduct())
+            for (let i = 0; i < 2; i++) {
+                this.items[i].createProduct();
+            }
+            this.btn('Загрузить ещё');
+        }
+    }
+
+    btn(text) {
+        let block = document.querySelector('.main');
+        let btn = document.createElement('button');
+        btn.classList.add('load-btn');
+        btn.innerText = `${text}`;
+        btn.addEventListener('click', () => {
+            this.loadMore();
+        });
+        block.appendChild(btn);
+    }
+
+    loadMore() {
+        if (this.items && this.loadedGoods <= this.items.length) {
+
+            for (let i = this.loadedGoods; i < this.loadedGoods + 2; i++) {
+                try {
+                    document.querySelector('.load-btn').remove();
+                    this.items[i].createProduct();
+                    this.btn('Загрузить ещё');
+                } catch (error) {
+                    this.btn('Товары закончились');
+                }
+
+            }
+
+
+            this.loadedGoods += 2;
         }
     }
 }
 
 const CatalogList = new Catalog();
-
-CatalogList.add(new Product('1', 1));
-CatalogList.add(new Product('2', 2));
-CatalogList.add(new Product('3', 3));
-
-CatalogList.render();
 
 const CartInstance = new Cart();
