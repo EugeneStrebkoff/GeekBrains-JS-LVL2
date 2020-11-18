@@ -29,11 +29,20 @@ class Product {
         btn.classList.add('btn-buy');
         btn.innerText = 'Купить';
         btn.addEventListener('click', () => {
-            const CartInstance = new Cart();
-            CartInstance.add(this);
-            let cartBlock = document.querySelector('.cart-block');
-            cartBlock.innerText = '';
-            CartInstance.render();
+            let promise = new Promise((resolve, reject) => {
+                const CartInstance = new Cart();
+                CartInstance.add(this);
+                let cartBlock = document.querySelector('.cart-block');
+                cartBlock.innerText = '';
+                resolve();
+            })
+            promise
+                .then(() => {
+
+                    CartInstance.render();
+                })
+
+
         })
         return btn;
     }
@@ -53,16 +62,18 @@ class List {
     constructor() {
 
     }
-    //в данной реализации метод принимает массив товаров и, перебирая создаёт новый массив объектов, имеющих ключи name и price с соответствующими значениями.
-    fetchGoods(quantity) {
-        let fetchedGoods = [];
-        for (let i = 1; i <= quantity; i++) {
-            fetchedGoods.push({
-                name: `${i}`,
-                price: i * 10
-            });
-        }
-        return fetchedGoods;
+    //
+    fetchGoods() {
+        const result = fetch('http://localhost:3000/database.json');
+        return result
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                this.items = data.data.map(cur => {
+                    return new Product(cur);
+                });
+            })
     }
 
     add(product) {
@@ -111,26 +122,39 @@ class Cart extends List {
             btnInc.classList.add('btn-inc');
             btnInc.innerText = '+';
             btnInc.addEventListener('click', () => {
-                elem.inc();
-                this.sumOfPrice += elem.price;
-                this.sumOfGoods++;
-                cartDiv.innerHTML = '';
-                this.render();
+                let promise = new Promise((resolve, reject) => {
+                    elem.inc();
+                    this.sumOfPrice += elem.price;
+                    this.sumOfGoods++;
+                    cartDiv.innerHTML = '';
+                    resolve();
+                })
+                promise
+                    .then(() => {
+                        this.render();
+                    })
+
 
             })
             let btnDec = document.createElement('button');
             btnInc.classList.add('btn-dec');
             btnDec.innerText = '-';
             btnDec.addEventListener('click', () => {
-                elem.dec();
-                this.sumOfPrice -= elem.price;
-                this.sumOfGoods--;
-                cartDiv.innerHTML = '';
-                if (elem.count === 0) {
-                    this.items.splice(this.items.indexOf(elem), 1);
-                    elem.count = 1;
-                }
-                this.render();
+                let promise = new Promise((resolve, reject) => {
+                    elem.dec();
+                    this.sumOfPrice -= elem.price;
+                    this.sumOfGoods--;
+                    cartDiv.innerHTML = '';
+                    if (elem.count === 0) {
+                        this.items.splice(this.items.indexOf(elem), 1);
+                        elem.count = 1;
+                    }
+                });
+                promise.then(() => {
+                    this.render();
+                })
+
+
             })
             cartDiv.appendChild(itemBlock);
             cartDiv.appendChild(btnInc);
@@ -176,11 +200,11 @@ class Catalog extends List {
 
     constructor() {
         super();
-        this.items = this.fetchGoods(13);
-        this.items = this.items.map((cur) => {
-            return new Product(cur);
+        let goods = this.fetchGoods();
+        goods.then(() => {
+            this.render();
         })
-        this.render();
+
     }
 
     render() {
@@ -216,7 +240,6 @@ class Catalog extends List {
                 }
 
             }
-
 
             this.loadedGoods += 2;
         }
