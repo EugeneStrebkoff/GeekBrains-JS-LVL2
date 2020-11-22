@@ -64,7 +64,7 @@ class List {
     }
     //
     fetchGoods() {
-        const result = fetch('./database.json');
+        const result = fetch('https://geekbrains-js-lvl2.herokuapp.com/database.json');
         return result
             .then(res => {
                 return res.json();
