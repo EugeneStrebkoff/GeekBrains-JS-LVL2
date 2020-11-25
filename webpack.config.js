@@ -6,13 +6,17 @@ module.exports = {
         path: path.resolve(__dirname, 'public/js'),
         filename: 'main.js'
     },
-    watch: true,
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.js$/,
+                use: ['babel-loader']
+            },
+            {
+                test: /\.scss$/,
                 use: [
-                    { loader: 'babel-loader' },
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
                 ]
             }
         ]

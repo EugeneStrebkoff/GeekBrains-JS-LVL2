@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "dev": "sudo webpack serve --hot --config webpack.dev.config.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/EugeneStrebkoff/GeekBrains-JS-LVL2#readme",
   "devDependencies": {
+    "pre-push": "^0.1.1",
     "webpack": "^5.6.0",
     "webpack-cli": "^4.2.0"
   },
@@ -26,6 +28,12 @@
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "babel": "^6.23.0",
-    "babel-loader": "^8.2.1"
+    "babel-loader": "^8.2.1",
+    "css-loader": "^5.0.1",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.4.0"
   }
 }
