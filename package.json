@@ -8,8 +8,12 @@
     "start": "node server.js",
     "build": "webpack",
     "dev": "sudo webpack serve --hot --config webpack.dev.config.js",
-    "pre-push": "build",
   },
+
+  "pre-push": {[
+    "run": "build"
+  ]},
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EugeneStrebkoff/GeekBrains-JS-LVL2.git"
