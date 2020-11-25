@@ -46,8 +46,6 @@ export default class Cart extends List {
                     .then(() => {
                         this.render();
                     })
-
-
             })
             let btnDec = document.createElement('button');
             btnInc.classList.add('btn-dec');
@@ -62,6 +60,7 @@ export default class Cart extends List {
                         this.items.splice(this.items.indexOf(elem), 1);
                         elem.count = 1;
                     }
+                    resolve();
                 });
                 promise.then(() => {
                     this.render();

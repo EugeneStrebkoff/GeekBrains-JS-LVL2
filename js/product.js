@@ -31,8 +31,8 @@ export default class Product {
         btn.classList.add('btn-buy');
         btn.innerText = 'Купить';
         btn.addEventListener('click', () => {
+            const CartInstance = new Cart();
             let promise = new Promise((resolve, reject) => {
-                const CartInstance = new Cart();
                 CartInstance.add(this);
                 let cartBlock = document.querySelector('.cart-block');
                 cartBlock.innerText = '';
