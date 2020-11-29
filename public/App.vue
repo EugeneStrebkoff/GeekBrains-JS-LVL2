@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style module>
+<style module lang="scss">
 header {
     margin: 0;
     background: linear-gradient(to top, #feeafa, #efd3d7);
