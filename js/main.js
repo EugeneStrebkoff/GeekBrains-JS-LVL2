@@ -5,6 +5,6 @@ new Vue({
     el: 'body',
     template: '<App />',
     components: {
-        App,
+        App
     }
 })
