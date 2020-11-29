@@ -1,18 +1,23 @@
 <template>
     <header>
         <span class="header-name">Shop</span>
-        <button class="cart-btn">Корзина</button>
-        <div class="cart-block"></div>
+        <button class="cart-btn" @click="changeShownState">Корзина</button>
+        <div class="cart-block" v-show="cartShawn"></div>
     </header>
 </template>
 
 <script>
 export default {
     data() {
-
+        return{
+            cartShawn: false
+        }      
     },
     methods: {
-
+        changeShownState() {
+            console.log('ok');
+            this.cartShawn = !this.cartShawn  
+        }
     }
 }
 </script>
@@ -47,12 +52,7 @@ header {
 }
 
 .cart-block {
-    display: none;
     width: 100%;
     margin: 0;
-}
-
-.shown {
-    display: block;
 }
 </style>
